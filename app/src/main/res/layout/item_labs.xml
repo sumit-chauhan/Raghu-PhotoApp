@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_lab_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="2dp"
+    android:background="@color/white"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/iv_lab_icon"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:src="@drawable/dummy_lab_icon"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="10dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_lab_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Color lab 1"
+            android:textStyle="bold"
+            android:textColor="@color/teal_700"
+            />
+
+        <TextView
+            android:id="@+id/tv_lab_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textColor="@color/txt_dark_gray"
+            android:text="+91-8090842211, 8090842233"
+            />
+
+        <TextView
+            android:id="@+id/tv_lab_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textColor="@color/txt_dark_gray"
+            android:text="colorlab1@gmail.com"
+            />
+
+        <TextView
+            android:id="@+id/tv_lab_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/txt_dark_gray"
+            android:text="Arya Nagar, New Delhi, Delhi-110034"
+            />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
