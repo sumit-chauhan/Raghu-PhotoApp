@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="3dp"
+    android:layout_margin="3dp"
+    app:contentPadding="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="3dp"
+        android:background="@color/white">
+
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tv_image_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:textSize="12sp"
+            android:textColor="#545353"
+            android:layout_toEndOf="@+id/iv_image" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_toEndOf="@+id/iv_image"
+            android:layout_below="@+id/tv_image_name">
+
+            <TextView
+                android:id="@+id/tv_image_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_8dp"
+                android:textSize="12sp"
+                tools:text="FAILED"
+                android:textColor="#545353"
+                android:textStyle="bold"
+                 />
+
+            <TextView
+                android:id="@+id/tv_retry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_8dp"
+                android:textSize="12sp"
+                android:text="@string/label_retry"
+                android:gravity="end"
+                android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_toEndOf="@+id/tv_image_status"
+                android:visibility="gone"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_baseline_replay_24"
+                app:drawableTint="@color/orange" />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

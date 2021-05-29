@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+   <LinearLayout
+       android:id="@+id/ll_labs"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:background="@color/white"
+       app:layout_constraintTop_toTopOf="parent">
+
+       <ImageView
+           android:layout_width="wrap_content"
+           android:layout_height="150dp"
+           android:layout_gravity="center_horizontal"
+           android:src="@drawable/icon" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="@color/teal_500"
+           android:layout_gravity="center_horizontal"
+           android:layout_marginBottom="@dimen/margin_8dp"
+           android:text="@string/upload_photos_on_the_go"/>
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="40dp"
+           android:background="@color/teal_500">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:textColor="@color/white"
+               android:padding="5dp"
+               android:textStyle="bold"
+               android:gravity="center_vertical"
+               android:layout_gravity="center_vertical"
+               android:text="@string/my_labs"/>
+
+           <androidx.appcompat.widget.AppCompatButton
+               android:id="@+id/btn_add_labs"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="@string/button_add_lab"
+               android:textColor="@color/white"
+               android:drawableTint="@color/white"
+               android:layout_gravity="end"
+               android:textAllCaps="false"
+               android:layout_alignParentRight="true"
+               android:drawableStart="@drawable/ic_baseline_add_24"
+               android:backgroundTint="@color/orange"
+               />
+       </RelativeLayout>
+
+       <RelativeLayout
+           android:id="@+id/rl_labs"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginBottom="120dp">
+
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/labs_recyclerview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="#d5d5d5"
+               android:visibility="gone"
+               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+               tools:listitem="@layout/item_labs"/>
+
+           <TextView
+               android:id="@+id/tv_no_labs_found"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:gravity="center"
+               android:textColor="@color/black"
+               android:textSize="18sp"
+               android:text="@string/label_no_labs_found"/>
+
+       </RelativeLayout>
+
+   </LinearLayout>
+
+    <include
+        layout="@layout/layout_company_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

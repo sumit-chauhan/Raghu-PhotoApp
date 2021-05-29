@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="2dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_lab_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/logo" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/orange"
+            android:layout_marginHorizontal="@dimen/margin_8dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_lab_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Marv Systems Pvt. Ltd."
+                android:textColor="@color/teal_700"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_lab_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="14sp"
+                android:textColor="@color/txt_dark_gray"
+                android:text="+91-8090842211,8090842233" />
+
+            <TextView
+                android:id="@+id/tv_lab_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="14sp"
+                android:textColor="@color/txt_dark_gray"
+                android:text="Noida, Uttar Pradesh" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
