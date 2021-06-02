@@ -4,20 +4,24 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:hardwareAccelerated="true"
-        android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/Theme.Fotosoft">
-        <activity android:name=".ui.album.view.CreateAlbumActivity"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Fotosoft"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.album.view.CreateAlbumActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Fotosoft.NoActionBar"/>
+            android:theme="@style/Theme.Fotosoft.NoActionBar" />
         <activity
             android:name=".ui.dashboard.view.DashboardActivity"
             android:label="@string/title_activity_dashboard"
@@ -39,21 +43,29 @@
             android:theme="@style/Theme.Fotosoft.NoActionBar" />
         <activity
             android:name=".ui.auth.view.SignUpActivity"
+            android:label="@string/label_activity_signup"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Fotosoft.NoActionBar"
-            android:label="@string/label_activity_signup" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.album.view.AttachImagesActivity"
-            android:screenOrientation="portrait"
             android:label="@string/label_activity_attach_images"
-            android:theme="@style/Theme.Fotosoft.NoActionBar"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Fotosoft.NoActionBar" />
 
         <activity
             android:name=".ui.album.view.SelectProductActivity"
-            android:screenOrientation="portrait"
             android:label="@string/label_activity_select_product"
-            android:theme="@style/Theme.Fotosoft.NoActionBar"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Fotosoft.NoActionBar" />
+
+        <receiver
+            android:name=".utils.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 

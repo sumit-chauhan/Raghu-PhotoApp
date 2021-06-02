@@ -27,7 +27,9 @@ import com.marvsystems.fotosoftapp.data.model.LoginModel
 import com.marvsystems.fotosoftapp.ui.base.ViewModelFactory
 import com.marvsystems.fotosoftapp.ui.dashboard.viewmodel.DashboardViewModel
 import com.marvsystems.fotosoftapp.ui.main.view.MainActivity
+import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.Constants.DB_NAME
+import kotlinx.android.synthetic.main.layout_lab_info_header.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 
@@ -174,5 +176,12 @@ class DashboardActivity : AppCompatActivity() {
         return if (homeFragment is HomeFragment) {
             homeFragment
         } else null
+    }
+
+    override fun onResume() {
+        CommonFunctions().updateNetworkImage(
+            this, network_type
+        );
+        super.onResume()
     }
 }

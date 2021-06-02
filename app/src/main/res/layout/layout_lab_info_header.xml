@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         android:padding="10dp">
 
         <ImageView
@@ -22,13 +22,14 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/orange"
-            android:layout_marginHorizontal="@dimen/margin_8dp"/>
+            android:layout_marginHorizontal="@dimen/margin_8dp"
+            android:background="@color/orange" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -38,28 +39,34 @@
                 android:layout_height="wrap_content"
                 android:text="Marv Systems Pvt. Ltd."
                 android:textColor="@color/teal_700"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_lab_mobile_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:textSize="14sp"
+                android:text="+91-8090842211,8090842233"
                 android:textColor="@color/txt_dark_gray"
-                android:text="+91-8090842211,8090842233" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_lab_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:textSize="14sp"
+                android:text="Noida, Uttar Pradesh"
                 android:textColor="@color/txt_dark_gray"
-                android:text="Noida, Uttar Pradesh" />
+                android:textSize="14sp" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/network_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/network_lte" />
 
     </LinearLayout>
 

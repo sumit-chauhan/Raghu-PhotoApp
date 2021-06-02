@@ -18,6 +18,7 @@ import com.marvsystems.fotosoftapp.ui.base.BaseActivity
 import com.marvsystems.fotosoftapp.ui.base.ViewModelFactory
 import com.marvsystems.fotosoftapp.ui.dashboard.view.DashboardActivity
 import com.marvsystems.fotosoftapp.utils.AppUtil
+import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.Constants.APP_VERSION
 import com.marvsystems.fotosoftapp.utils.Status
 import kotlinx.android.synthetic.main.activity_login.*
@@ -48,15 +49,15 @@ class LoginActivity : BaseActivity() {
         setLabInfo()
         isRemember(data!!)
         btn_signup.setOnClickListener {
-            val intent = Intent(this,SignUpActivity::class.java)
-            intent.putExtra("LAB",data)
+            val intent = Intent(this, SignUpActivity::class.java)
+            intent.putExtra("LAB", data)
             startActivity(intent)
         }
 
         btn_login.setOnClickListener {
-            if (AppUtil.isNetworkAvailable(this)){
+            if (AppUtil.isNetworkAvailable(this)) {
                 login(username_et.text.toString(), password_et.text.toString())
-            }else{
+            } else {
                 showToast("Please check your internet connectivity")
             }
         }
@@ -79,11 +80,11 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun clearFields(){
-     username_et.text=null
-     password_et.text=null
-     checkbox_remember.isChecked=false
-     isRemember=false
+    private fun clearFields() {
+        username_et.text = null
+        password_et.text = null
+        checkbox_remember.isChecked = false
+        isRemember = false
     }
 
     private fun isRemember(lab: Lab) {
@@ -133,7 +134,7 @@ class LoginActivity : BaseActivity() {
                     it.data?.let { _ ->
                         val intent = Intent(this, DashboardActivity::class.java)
                         intent.putExtra("DATA", it.data)
-                        intent.putExtra("LAB",data)
+                        intent.putExtra("LAB", data)
                         startActivity(intent)
                         finishAffinity()
                     }
@@ -166,29 +167,37 @@ class LoginActivity : BaseActivity() {
 //        )
 //        tv_lab_mobile_number.text = phone
 
-        var phoneNo  = ""
+        var phoneNo = ""
 
-        if (data?.contactPersonMobile != null && data?.contactPersonMobile != ""){
+        if (data?.contactPersonMobile != null && data?.contactPersonMobile != "") {
             phoneNo = String.format("%s", data?.contactPersonMobile)
         }
 
-        if (data?.compPhone != null && data?.compPhone != ""){
-            if (phoneNo.length == 0)    phoneNo = String.format("%s", data?.compPhone)
-            else                        phoneNo = String.format("%s, %s", phoneNo, data?.compPhone)
+        if (data?.compPhone != null && data?.compPhone != "") {
+            if (phoneNo.length == 0) phoneNo = String.format("%s", data?.compPhone)
+            else phoneNo = String.format("%s, %s", phoneNo, data?.compPhone)
         }
 
-        if (data?.contactPersonInternalMobile != null && data?.contactPersonInternalMobile != ""){
-            if (phoneNo.length == 0)    phoneNo = String.format("%s", data?.contactPersonInternalMobile)
-            else                        phoneNo = String.format("%s, %s", phoneNo, data?.contactPersonInternalMobile)
+        if (data?.contactPersonInternalMobile != null && data?.contactPersonInternalMobile != "") {
+            if (phoneNo.length == 0) phoneNo =
+                String.format("%s", data?.contactPersonInternalMobile)
+            else phoneNo = String.format("%s, %s", phoneNo, data?.contactPersonInternalMobile)
         }
 
         tv_lab_mobile_number.text = phoneNo
 
         iv_lab_icon.setImageBitmap(AppUtil.convertBase64ToBitmap(data?.compLogoImage!!))
 
-        tv_contact_1.text= "+91-${data?.albumUploaderNo}"
-        tv_contact_2.text= "+91-${data?.albumBookingNo}"
-        tv_delivery.text= "+91-${data?.delivery1No}"
-        tv_complaint.text= "+91-${data?.complainNo}"
+        tv_contact_1.text = "+91-${data?.albumUploaderNo}"
+        tv_contact_2.text = "+91-${data?.albumBookingNo}"
+        tv_delivery.text = "+91-${data?.delivery1No}"
+        tv_complaint.text = "+91-${data?.complainNo}"
+    }
+
+    override fun onResume() {
+        CommonFunctions().updateNetworkImage(
+            this, network_type
+        );
+        super.onResume()
     }
 }

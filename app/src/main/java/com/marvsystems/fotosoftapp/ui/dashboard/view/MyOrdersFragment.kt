@@ -16,6 +16,7 @@ import com.marvsystems.fotosoftapp.ui.base.BaseFragment
 import com.marvsystems.fotosoftapp.ui.dashboard.adapter.MyOrdersAdapter
 import com.marvsystems.fotosoftapp.ui.dashboard.viewmodel.DashboardViewModel
 import com.marvsystems.fotosoftapp.utils.AppUtil
+import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.Status
 import kotlinx.android.synthetic.main.fragment_my_orders.*
 import kotlinx.android.synthetic.main.layout_lab_info_header.*
@@ -227,5 +228,12 @@ class MyOrdersFragment : BaseFragment() {
         tv_lab_mobile_number.text = phoneNo
 
         iv_lab_icon.setImageBitmap(AppUtil.convertBase64ToBitmap(dashboardViewModel.lab?.compLogoImage!!))
+    }
+
+    override fun onResume() {
+        CommonFunctions().updateNetworkImage(
+            requireActivity(), network_type
+        );
+        super.onResume()
     }
 }

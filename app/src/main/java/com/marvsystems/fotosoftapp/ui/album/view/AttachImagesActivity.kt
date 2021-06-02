@@ -23,6 +23,7 @@ import com.marvsystems.fotosoftapp.ui.dashboard.DeleteListener
 import com.marvsystems.fotosoftapp.ui.dashboard.adapter.ImagesAdapter
 import com.marvsystems.fotosoftapp.ui.dashboard.view.DashboardActivity
 import com.marvsystems.fotosoftapp.utils.AppUtil
+import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.DateTimeFormat
 import com.marvsystems.fotosoftapp.utils.Status
 import gun0912.tedimagepicker.builder.TedRxImagePicker
@@ -81,7 +82,10 @@ class AttachImagesActivity : BaseActivity(), DeleteListener {
         observeImageSave()
 
         btn_create_album?.setOnClickListener {
-            createOrder()
+            if(totalImageSize() > 0)
+                createOrder()
+            else
+                showToast("Please select atleast one picture.")
         }
     }
 

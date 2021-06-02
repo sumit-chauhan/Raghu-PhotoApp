@@ -31,6 +31,7 @@ import com.marvsystems.fotosoftapp.ui.dashboard.RetryListener
 import com.marvsystems.fotosoftapp.ui.dashboard.adapter.OrderImagesAdapter
 import com.marvsystems.fotosoftapp.ui.dashboard.viewmodel.DashboardViewModel
 import com.marvsystems.fotosoftapp.utils.AppUtil
+import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.NetworkUtils
 import com.marvsystems.fotosoftapp.utils.Status
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -469,6 +470,7 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
                 }
             }
             OrderStatus.CANCELLED -> println("Order Cancelled")
+            OrderStatus.COMPLETED -> showToast("Congrats! Your order successfully placed! We will update status shortly!")
             else -> {
                 showToast("Invalid Order Status")
             }
@@ -477,6 +479,9 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
 
     private fun toggleRecentOrders(toggle: Boolean) {
         ll_recent_orders.visibility = if (toggle) View.VISIBLE else View.GONE
+        if (ll_recent_orders.visibility == View.GONE)
+            showToast("Congrats! Your order successfully placed! We will update status shortly!")
+
         btn_create_order.visibility = if (toggle) View.VISIBLE else View.GONE
         products_recyclerview?.visibility = if (toggle) View.GONE else View.VISIBLE
         if (!toggle && productList.isNullOrEmpty()) {
@@ -517,6 +522,13 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
      */
     protected fun showToast(message: String?) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onResume() {
+        CommonFunctions().updateNetworkImage(
+            requireActivity(), network_type
+        );
+        super.onResume()
     }
 
     override fun onRetry(orderImages: OrderImages) {

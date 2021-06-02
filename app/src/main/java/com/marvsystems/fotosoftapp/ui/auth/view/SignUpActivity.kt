@@ -21,6 +21,7 @@ import com.marvsystems.fotosoftapp.ui.auth.viewmodel.SignUpViewModel
 import com.marvsystems.fotosoftapp.ui.base.BaseActivity
 import com.marvsystems.fotosoftapp.ui.base.ViewModelFactory
 import com.marvsystems.fotosoftapp.utils.AppUtil
+import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.Status
 import com.marvsystems.fotosoftapp.utils.ValidationManager
 import kotlinx.android.synthetic.main.activity_signup.*
@@ -261,20 +262,20 @@ class SignUpActivity : BaseActivity() {
 //        )
 //        tv_lab_mobile_number.text = phone
 
-        var phoneNo  = ""
+        var phoneNo = ""
 
-        if (lab?.contactPersonMobile != null && lab?.contactPersonMobile != ""){
+        if (lab?.contactPersonMobile != null && lab?.contactPersonMobile != "") {
             phoneNo = String.format("%s", lab?.contactPersonMobile)
         }
 
-        if (lab?.compPhone != null && lab?.compPhone != ""){
-            if (phoneNo.length == 0)    phoneNo = String.format("%s", lab?.compPhone)
-            else                        phoneNo = String.format("%s, %s", phoneNo, lab?.compPhone)
+        if (lab?.compPhone != null && lab?.compPhone != "") {
+            if (phoneNo.length == 0) phoneNo = String.format("%s", lab?.compPhone)
+            else phoneNo = String.format("%s, %s", phoneNo, lab?.compPhone)
         }
 
-        if (lab?.contactPersonInternalMobile != null && lab?.contactPersonInternalMobile != ""){
-            if (phoneNo.length == 0)    phoneNo = String.format("%s", lab?.contactPersonInternalMobile)
-            else                        phoneNo = String.format("%s, %s", phoneNo, lab?.contactPersonInternalMobile)
+        if (lab?.contactPersonInternalMobile != null && lab?.contactPersonInternalMobile != "") {
+            if (phoneNo.length == 0) phoneNo = String.format("%s", lab?.contactPersonInternalMobile)
+            else phoneNo = String.format("%s, %s", phoneNo, lab?.contactPersonInternalMobile)
         }
 
         tv_lab_mobile_number.text = phoneNo
@@ -291,101 +292,87 @@ class SignUpActivity : BaseActivity() {
     }
 
 
-
-// Show all fields one go
+    // Show all fields one go
     private fun isValid(): Boolean {
         var isValid = true
 
-    if (confirm_password_et.text.isNullOrEmpty()) {
-        confirm_password_til.error = getString(R.string.error_invalid_confirm_password)
-        confirm_password_et.requestFocus()
-        isValid = false
-    }
-    else if (confirm_password_et.text.toString().length < 5) {
-        confirm_password_til.error = getString(R.string.error_invalid_password_length)
-        confirm_password_et.requestFocus()
-        isValid = false
-    }
-    else if (confirm_password_et.text.toString() != password_et.text.toString()) {
-        confirm_password_til.error = getString(R.string.error_password_confirm_password_does_not_match)
-        confirm_password_et.requestFocus()
-        isValid = false
-    }
+        if (confirm_password_et.text.isNullOrEmpty()) {
+            confirm_password_til.error = getString(R.string.error_invalid_confirm_password)
+            confirm_password_et.requestFocus()
+            isValid = false
+        } else if (confirm_password_et.text.toString().length < 5) {
+            confirm_password_til.error = getString(R.string.error_invalid_password_length)
+            confirm_password_et.requestFocus()
+            isValid = false
+        } else if (confirm_password_et.text.toString() != password_et.text.toString()) {
+            confirm_password_til.error =
+                getString(R.string.error_password_confirm_password_does_not_match)
+            confirm_password_et.requestFocus()
+            isValid = false
+        }
 
+        if (password_et.text.isNullOrEmpty()) {
+            password_til.error = getString(R.string.error_invalid_password)
+            password_et.requestFocus()
+            isValid = false
+        } else if (password_et.text.toString().length < 5) {
+            password_til.error = getString(R.string.error_invalid_password_length)
+            password_et.requestFocus()
+            isValid = false
+        }
 
-    if (password_et.text.isNullOrEmpty()) {
-        password_til.error = getString(R.string.error_invalid_password)
-        password_et.requestFocus()
-        isValid = false
-    }
-    else if (password_et.text.toString().length < 5) {
-        password_til.error = getString(R.string.error_invalid_password_length)
-        password_et.requestFocus()
-        isValid = false
-    }
+        if (login_id_et.text.isNullOrEmpty()) {
+            login_id_til.error = getString(R.string.error_invalid_login_id)
+            login_id_et.requestFocus()
+            isValid = false
+        } else if (login_id_et.text.toString().length < 5) {
+            login_id_til.error = getString(R.string.error_invalid_login_id_length)
+            login_id_et.requestFocus()
+            isValid = false
+        }
 
+        if (mobile_et.text.isNullOrEmpty() || !ValidationManager.isValidMobileNumber(mobile_et.text)) {
+            mobile_til.error = getString(R.string.error_invalid_mobile)
+            mobile_et.requestFocus()
+            isValid = false
+        }
 
-    if (login_id_et.text.isNullOrEmpty()) {
-        login_id_til.error = getString(R.string.error_invalid_login_id)
-        login_id_et.requestFocus()
-        isValid = false
-    }
-    else if (login_id_et.text.toString().length < 5) {
-        login_id_til.error = getString(R.string.error_invalid_login_id_length)
-        login_id_et.requestFocus()
-        isValid = false
-    }
+        if (!email_et.text.isNullOrEmpty() && !ValidationManager.isValidEmail(email_et.text)) {
+            email_til.error = getString(R.string.error_invalid_email)
+            email_et.requestFocus()
+            isValid = false
+        }
 
+        if (!pincode_et.text.isNullOrEmpty() && !ValidationManager.isValidPinCode(pincode_et.text)) {
+            pincode_til.error = getString(R.string.error_invalid_pincode)
+            pincode_et.requestFocus()
+            isValid = false
+        }
 
+        if (city_et.text.isNullOrEmpty()) {
+            city_til.error = getString(R.string.error_invalid_city)
+            city_et.requestFocus()
+            isValid = false
+        } else if (city_et.text.toString().length < 3) {
+            city_til.error = getString(R.string.error_invalid_city_length)
+            city_et.requestFocus()
+            isValid = false
+        }
 
-    if (mobile_et.text.isNullOrEmpty() || !ValidationManager.isValidMobileNumber(mobile_et.text)) {
-        mobile_til.error = getString(R.string.error_invalid_mobile)
-        mobile_et.requestFocus()
-        isValid = false
-    }
+        if (signUpRequestModel?.stateID == 0) {
+            showToast("Please select a valid State")
+            isValid = false
+        }
 
-
-    if (!email_et.text.isNullOrEmpty() && !ValidationManager.isValidEmail(email_et.text)) {
-        email_til.error = getString(R.string.error_invalid_email)
-        email_et.requestFocus()
-        isValid = false
-    }
-
-
-    if (!pincode_et.text.isNullOrEmpty() && !ValidationManager.isValidPinCode(pincode_et.text)) {
-        pincode_til.error = getString(R.string.error_invalid_pincode)
-        pincode_et.requestFocus()
-        isValid = false
-    }
-
-    if (city_et.text.isNullOrEmpty()) {
-        city_til.error = getString(R.string.error_invalid_city)
-        city_et.requestFocus()
-        isValid = false
-    }
-    else if (city_et.text.toString().length < 3) {
-        city_til.error = getString(R.string.error_invalid_city_length)
-        city_et.requestFocus()
-        isValid = false
-    }
-
-
-    if (signUpRequestModel?.stateID == 0) {
-        showToast("Please select a valid State")
-        isValid = false
-    }
-
-
-    if (party_name_et.text.isNullOrEmpty()) {
-        party_name_til.error = getString(R.string.error_invalid_party_name)
-        party_name_et.requestFocus()
-        isValid = false
-    }
-    else if (party_name_et.text.toString().length < 5) {
-        party_name_til.error = getString(R.string.error_invalid_party_name_length)
-        party_name_et.requestFocus()
-        isValid = false
-    }
+        if (party_name_et.text.isNullOrEmpty()) {
+            party_name_til.error = getString(R.string.error_invalid_party_name)
+            party_name_et.requestFocus()
+            isValid = false
+        } else if (party_name_et.text.toString().length < 5) {
+            party_name_til.error = getString(R.string.error_invalid_party_name_length)
+            party_name_et.requestFocus()
+            isValid = false
+        }
 
         return isValid
     }
@@ -473,4 +460,10 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        CommonFunctions().updateNetworkImage(
+            this, network_type
+        );
+        super.onResume()
+    }
 }

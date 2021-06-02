@@ -11,16 +11,20 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
+import androidx.room.Room
 import com.google.gson.Gson
 import com.marvsystems.fotosoftapp.R
+import com.marvsystems.fotosoftapp.data.api.ApiHelper
+import com.marvsystems.fotosoftapp.data.api.ApiServiceImpl
+import com.marvsystems.fotosoftapp.data.database.AppDatabase
 import com.marvsystems.fotosoftapp.data.model.SignUpRequestModel
 import com.marvsystems.fotosoftapp.data.model.State
 import com.marvsystems.fotosoftapp.ui.auth.viewmodel.SignUpViewModel
+import com.marvsystems.fotosoftapp.ui.base.ViewModelFactory
 import com.marvsystems.fotosoftapp.ui.dashboard.viewmodel.DashboardViewModel
-import com.marvsystems.fotosoftapp.utils.AppUtil
-import com.marvsystems.fotosoftapp.utils.Status
-import com.marvsystems.fotosoftapp.utils.ValidationManager
+import com.marvsystems.fotosoftapp.utils.*
 import kotlinx.android.synthetic.main.activity_signup.*
 import kotlinx.android.synthetic.main.activity_signup.address_et
 import kotlinx.android.synthetic.main.activity_signup.city_et
@@ -60,6 +64,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewModel()
+        signUpRequestModel = SignUpRequestModel()
         initLoader();
         setLabInfo()
         setProfileInfo();
@@ -69,6 +75,13 @@ class ProfileFragment : Fragment() {
         dialog = Dialog(requireActivity())
         dialog?.setContentView(R.layout.layout_progress)
         dialog?.setCanceledOnTouchOutside(false)
+    }
+
+    private fun setupViewModel() {
+        signUpViewModel = ViewModelProviders.of(
+            this,
+            ViewModelFactory(ApiHelper(ApiServiceImpl()), getDatabase())
+        ).get(SignUpViewModel::class.java)
     }
 
     private fun setProfileInfo() {
@@ -154,7 +167,6 @@ class ProfileFragment : Fragment() {
             isValid = false
         }
 
-
         if (password_et.text.isNullOrEmpty()) {
             password_til.error = getString(R.string.error_invalid_password)
             password_et.requestFocus()
@@ -164,7 +176,6 @@ class ProfileFragment : Fragment() {
             password_et.requestFocus()
             isValid = false
         }
-
 
         if (login_id_et.text.isNullOrEmpty()) {
             login_id_til.error = getString(R.string.error_invalid_login_id)
@@ -176,21 +187,17 @@ class ProfileFragment : Fragment() {
             isValid = false
         }
 
-
-
         if (mobile_et.text.isNullOrEmpty() || !ValidationManager.isValidMobileNumber(mobile_et.text)) {
             mobile_til.error = getString(R.string.error_invalid_mobile)
             mobile_et.requestFocus()
             isValid = false
         }
 
-
         if (!email_et.text.isNullOrEmpty() && !ValidationManager.isValidEmail(email_et.text)) {
             email_til.error = getString(R.string.error_invalid_email)
             email_et.requestFocus()
             isValid = false
         }
-
 
         if (!pincode_et.text.isNullOrEmpty() && !ValidationManager.isValidPinCode(pincode_et.text)) {
             pincode_til.error = getString(R.string.error_invalid_pincode)
@@ -208,13 +215,11 @@ class ProfileFragment : Fragment() {
             isValid = false
         }
 
-
         if (signUpRequestModel?.stateID == 0) {
             Toast.makeText(requireActivity(), "Please select a valid State", Toast.LENGTH_LONG)
                 .show()
             isValid = false
         }
-
 
         if (party_name_et.text.isNullOrEmpty()) {
             party_name_til.error = getString(R.string.error_invalid_party_name)
@@ -280,5 +285,19 @@ class ProfileFragment : Fragment() {
 
     protected fun dismissProgress() {
         dialog?.dismiss()
+    }
+
+    protected fun getDatabase(): AppDatabase {
+        return Room.databaseBuilder(
+            requireActivity(),
+            AppDatabase::class.java, Constants.DB_NAME
+        ).build()
+    }
+
+    override fun onResume() {
+        CommonFunctions().updateNetworkImage(
+            requireActivity(), network_type
+        );
+        super.onResume()
     }
 }

@@ -41,14 +41,14 @@ class MainActivity : BaseActivity(), LabClickListener {
         labs_recyclerview.adapter = adapter
 
         btn_add_labs.setOnClickListener {
-            if (AppUtil.isNetworkAvailable(this)){
+            if (AppUtil.isNetworkAvailable(this)) {
                 addLabs()
-            }else{
+            } else {
                 showToast("Please check your internet connectivity")
             }
         }
         loadLabs()
-        if (AppUtil.isNetworkAvailable(this)){
+        if (AppUtil.isNetworkAvailable(this)) {
             mainViewModel.fetchAllLabsForUpdate()
         }
     }
@@ -60,7 +60,7 @@ class MainActivity : BaseActivity(), LabClickListener {
     private fun addLabs() {
         val customDialog = AddLabsDialog(this, object : SubmitLabClickListener {
             override fun onSubmitClick(licence: String) {
-                if (licence.isNotBlank()) {
+                if (licence.isNotBlank() && checkExistingAddedLicence(licence)) {
                     Log.e("Licence", licence)
                     mainViewModel.fetchLabDetails(licence)
                 }
@@ -68,6 +68,22 @@ class MainActivity : BaseActivity(), LabClickListener {
 
         })
         customDialog.show()
+    }
+
+    private fun checkExistingAddedLicence(licence: String): Boolean {
+        try {
+            if (labs != null) {
+                for (i in labs.indices) {
+                    if (labs.get(i).licenseKey == licence) {
+                        showToast("Already added this lab. Try to add another one.")
+                        return false;
+                    }
+                }
+            }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        }
+        return true;
     }
 
 
