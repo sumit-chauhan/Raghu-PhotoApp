@@ -3,7 +3,6 @@ package com.marvsystems.fotosoftapp.ui.dashboard.view
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -16,24 +15,20 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.room.Room
 import com.google.android.material.navigation.NavigationView
 import com.marvsystems.fotosoftapp.R
 import com.marvsystems.fotosoftapp.data.api.ApiHelper
 import com.marvsystems.fotosoftapp.data.api.ApiServiceImpl
-import com.marvsystems.fotosoftapp.data.database.AppDatabase
 import com.marvsystems.fotosoftapp.data.database.Lab
 import com.marvsystems.fotosoftapp.data.model.LoginModel
+import com.marvsystems.fotosoftapp.ui.base.BaseActivity
 import com.marvsystems.fotosoftapp.ui.base.ViewModelFactory
 import com.marvsystems.fotosoftapp.ui.dashboard.viewmodel.DashboardViewModel
 import com.marvsystems.fotosoftapp.ui.main.view.MainActivity
-import com.marvsystems.fotosoftapp.utils.CommonFunctions
-import com.marvsystems.fotosoftapp.utils.Constants.DB_NAME
-import kotlinx.android.synthetic.main.layout_lab_info_header.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var navController: NavController;
@@ -44,6 +39,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+//        initImage(toolbar.network_type)
         data = intent.getSerializableExtra("DATA") as LoginModel?
         lab = intent.getSerializableExtra("LAB") as Lab?
 
@@ -107,16 +103,15 @@ class DashboardActivity : AppCompatActivity() {
         ).get(DashboardViewModel::class.java)
     }
 
-    private fun getDatabase(): AppDatabase {
+/*    private override fun getDatabase(): AppDatabase {
         return Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, DB_NAME
         ).build()
-    }
+    }*/
 
     override fun onBackPressed() {
         if (getCurrentVisibleFragment() != null) {
-
             if (dashboardViewModel.recentOrder != null) {
                 val alertDialog = AlertDialog.Builder(this)
                     .setTitle("Exit")
@@ -130,8 +125,7 @@ class DashboardActivity : AppCompatActivity() {
                         "No"
                     ) { dialog, p1 -> dialog?.dismiss() }.create()
                 alertDialog.show()
-            }
-            else{
+            } else {
                 val alertDialog = AlertDialog.Builder(this)
                     .setTitle("Exit")
                     .setMessage("Are you sure you want to exit?")
@@ -145,7 +139,6 @@ class DashboardActivity : AppCompatActivity() {
                     ) { dialog, p1 -> dialog?.dismiss() }.create()
                 alertDialog.show()
             }
-
 
 
 //            val alertBuilder = androidx.appcompat.app.AlertDialog.Builder(this)
@@ -178,10 +171,10 @@ class DashboardActivity : AppCompatActivity() {
         } else null
     }
 
-    override fun onResume() {
-        CommonFunctions().updateNetworkImage(
-            this, network_type
-        );
-        super.onResume()
-    }
+    /*  override fun onResume() {
+          CommonFunctions().updateNetworkImage(
+              this, network_type
+          );
+          super.onResume()
+      }*/
 }

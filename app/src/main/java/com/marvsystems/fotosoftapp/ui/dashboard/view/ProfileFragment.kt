@@ -294,10 +294,10 @@ class ProfileFragment : Fragment() {
         ).build()
     }
 
-    override fun onResume() {
+/*    override fun onResume() {
         CommonFunctions().updateNetworkImage(
             requireActivity(), network_type
         );
         super.onResume()
-    }
+    }*/
 }

@@ -230,10 +230,10 @@ class MyOrdersFragment : BaseFragment() {
         iv_lab_icon.setImageBitmap(AppUtil.convertBase64ToBitmap(dashboardViewModel.lab?.compLogoImage!!))
     }
 
-    override fun onResume() {
+    /*override fun onResume() {
         CommonFunctions().updateNetworkImage(
             requireActivity(), network_type
         );
         super.onResume()
-    }
+    }*/
 }

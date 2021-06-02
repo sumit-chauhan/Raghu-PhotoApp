@@ -3,6 +3,7 @@ package com.marvsystems.fotosoftapp.ui.album.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.marvsystems.fotosoftapp.R
@@ -128,5 +129,12 @@ class SelectProductActivity : BaseActivity() , ProductClickListener {
         intent.putExtra("LAB", lab)
         intent.putExtra("PRODUCT", product)
         startActivity(intent)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

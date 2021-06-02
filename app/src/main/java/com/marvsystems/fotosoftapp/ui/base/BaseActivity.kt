@@ -18,6 +18,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,10 +30,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.marvsystems.fotosoftapp.R
 import com.marvsystems.fotosoftapp.data.database.AppDatabase
 import com.marvsystems.fotosoftapp.utils.AppSharedPreferences
-import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.ConnectivityReceiver
 import com.marvsystems.fotosoftapp.utils.Constants.DB_NAME
-import kotlinx.android.synthetic.main.layout_lab_info_header.*
+import kotlinx.android.synthetic.main.app_bar.view.*
 
 
 /**
@@ -43,7 +43,7 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
     private val REQUEST_CODE_ASK_PERMISSIONS = 1002
     private var dialog: Dialog? = null
     public var appSharedPreferences: AppSharedPreferences? = null
-//    private var nwImg: ImageView = TODO();
+    private lateinit var network_type: ImageView;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +61,9 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
         )
     }
 
-//    public fun initImage(imageView: ImageView) {
-//        nwImg = imageView;
-//    }
+    public fun initImage(imageView: ImageView) {
+        network_type = imageView;
+    }
 
     /**
      * Method to show progress dialog
@@ -126,12 +126,6 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
     /**
      * Method to handle back button
      */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     /**
      * Method to clear errors on text Change
@@ -190,10 +184,43 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
         super.onResume()
         ConnectivityReceiver.connectivityReceiverListener = this
 
+        handlingNetwork()
+    }
+
+    fun handlingNetwork() {
         try {
-            CommonFunctions().updateNetworkImage(
-                this, network_type
-            );
+            val toolbar: Toolbar = findViewById(R.id.toolbar)
+            initImage(toolbar.network_type)
+            if (isOnline(this))
+                setNetworkMode();
+            else {
+                network_type.setImageResource(R.drawable.network_wifi_off);
+                network_type.setColorFilter(
+                    ContextCompat.getColor(this, R.color.orange_red),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            }
+        } catch (exception: Exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    fun setNetworkMode() {
+        try {
+            if (network_type != null) {
+                var mode = appSharedPreferences?.getString("ConnectionMode");
+                if (mode == "Cellular") {
+                    appSharedPreferences?.setString("ConnectionType", getNetworkClass(this));
+                    updateNetworkImage(network_type)
+                } else {
+                    network_type.setImageResource(R.drawable.network_wifi_on);
+                    network_type.setColorFilter(
+                        ContextCompat.getColor(this, R.color.green),
+                        android.graphics.PorterDuff.Mode.SRC_IN
+                    );
+                }
+            }
+
         } catch (exception: Exception) {
             exception.printStackTrace();
         }
@@ -210,23 +237,22 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
                         REQUEST_CODE_ASK_PERMISSIONS
                     )
                 } else {
-                    appSharedPreferences?.setString("ConnectionType", getNetworkClass(this));
+                    handlingNetwork()
+//                    appSharedPreferences?.setString("ConnectionType", getNetworkClass(this));
                 }
             }
 //            updateNetworkImage(appSharedPreferences?.getString("ConnectionType"), nwImg);
+        } else {
+            if (network_type != null) {
+                network_type.setImageResource(R.drawable.network_wifi_off);
+                network_type.setColorFilter(
+                    ContextCompat.getColor(this, R.color.orange_red),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            }
         }
     }
 
-    fun updateNetworkImage(type: String?, image: ImageView) {
-        if (image != null && type != null) {
-            if (type == "2G")
-                image.setImageResource(R.drawable.network_2g);
-            else if (type == "3G")
-                image.setImageResource(R.drawable.network_3g);
-            else if (type == "4G")
-                image.setImageResource(R.drawable.network_4g);
-        }
-    }
 
     open fun getNetworkClass(context: Context): String? {
         if (ActivityCompat.checkSelfPermission(
@@ -267,6 +293,68 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
                 }
                 return
+            }
+        }
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    appSharedPreferences?.setString("ConnectionMode", "Cellular");
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    appSharedPreferences?.setString("ConnectionMode", "Wifi");
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    appSharedPreferences?.setString("ConnectionMode", "Ethernet");
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    fun updateNetworkImage(image: ImageView) {
+        var type = appSharedPreferences?.getString("ConnectionType");
+        if (image != null && type != null) {
+            if (type == "2G") {
+                image.setImageResource(R.drawable.network_2g);
+                image.setColorFilter(
+                    ContextCompat.getColor(this, R.color.yellow),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            } else if (type == "3G") {
+                image.setImageResource(R.drawable.network_3g);
+                image.setColorFilter(
+                    ContextCompat.getColor(this, R.color.green),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            } else if (type == "4G") {
+                image.setImageResource(R.drawable.network_4g);
+                image.setColorFilter(
+                    ContextCompat.getColor(this, R.color.green),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            } else if (type == "LTE") {
+                image.setImageResource(R.drawable.network_lte);
+                image.setColorFilter(
+                    ContextCompat.getColor(this, R.color.green_dark),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            } else { // TODO check
+                image.setImageResource(R.drawable.network_h);
+                image.setColorFilter(
+                    ContextCompat.getColor(this, R.color.gray),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                );
             }
         }
     }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -259,4 +260,12 @@ class AttachImagesActivity : BaseActivity(), DeleteListener {
     private fun sortList(orderImages: ArrayList<OrderImages>) {
         orderImages.sortBy { it.imageName?.toLowerCase() }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

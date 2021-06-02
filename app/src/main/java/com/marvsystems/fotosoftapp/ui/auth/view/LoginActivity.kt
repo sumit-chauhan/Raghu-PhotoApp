@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
+import android.view.MenuItem
 import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.lifecycle.ViewModelProviders
@@ -200,4 +201,12 @@ class LoginActivity : BaseActivity() {
         );
         super.onResume()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

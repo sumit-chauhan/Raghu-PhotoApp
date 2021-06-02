@@ -58,6 +58,8 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
     private val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     private val serverSdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
     private var dialog: Dialog? = null
+    private var isOrderCancel = false;
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -128,6 +130,7 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
             alertBuilder.setMessage("Are you sure you want to cancel the upload?")
             alertBuilder.setPositiveButton("Yes") { dialog, which ->
                 dialog.dismiss()
+                isOrderCancel = true;
                 dashboardViewModel.updateOrderStatus(
                     dashboardViewModel.recentOrder?.localOrderId?.toInt()!!,
                     "COMPLETED"
@@ -153,6 +156,7 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
                     "An order already is in progress, Please create another one once it gets completed"
                 )
             } else {
+                isOrderCancel = false;
                 val intent = Intent(requireActivity(), SelectProductActivity::class.java)
                 intent.putExtra("DATA", dashboardViewModel.user)
                 intent.putExtra("LAB", dashboardViewModel.lab)
@@ -469,8 +473,11 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
                     dashboardViewModel.getPendingImage(order.localOrderId?.toInt()!!, 0)
                 }
             }
-            OrderStatus.CANCELLED -> println("Order Cancelled")
-            OrderStatus.COMPLETED -> showToast("Congrats! Your order successfully placed! We will update status shortly!")
+            OrderStatus.CANCELLED -> {
+                isOrderCancel = true
+                println("Order Cancelled")
+            }
+            OrderStatus.COMPLETED -> println("Order Completed") // showToast("Congrats! Your order successfully placed! We will update status shortly!")
             else -> {
                 showToast("Invalid Order Status")
             }
@@ -478,10 +485,9 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
     }
 
     private fun toggleRecentOrders(toggle: Boolean) {
-        ll_recent_orders.visibility = if (toggle) View.VISIBLE else View.GONE
-        if (ll_recent_orders.visibility == View.GONE)
+        if (ll_recent_orders.visibility == View.VISIBLE && toggle && !isOrderCancel)
             showToast("Congrats! Your order successfully placed! We will update status shortly!")
-
+        ll_recent_orders.visibility = if (toggle) View.VISIBLE else View.GONE
         btn_create_order.visibility = if (toggle) View.VISIBLE else View.GONE
         products_recyclerview?.visibility = if (toggle) View.GONE else View.VISIBLE
         if (!toggle && productList.isNullOrEmpty()) {
@@ -524,12 +530,12 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onResume() {
-        CommonFunctions().updateNetworkImage(
-            requireActivity(), network_type
-        );
-        super.onResume()
-    }
+//    override fun onResume() {
+//        CommonFunctions().updateNetworkImage(
+//            requireActivity(), network_type
+//        );
+//        super.onResume()
+//    }
 
     override fun onRetry(orderImages: OrderImages) {
         dashboardViewModel.uploadFile(orderImages)
