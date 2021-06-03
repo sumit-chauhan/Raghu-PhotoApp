@@ -30,7 +30,6 @@ class DashboardViewModel(
     private val dataRepository: DataRepository,
     private val appDatabase: AppDatabase
 ) : ViewModel() {
-
     var user: LoginModel? = null
     var lab: Lab? = null
     private val pastOrders = MutableLiveData<Resource<List<Order>>>()
@@ -42,8 +41,9 @@ class DashboardViewModel(
     private val imageIds = MutableLiveData<Resource<JSONArray>>()
     private val pendingImage = MutableLiveData<Resource<OrderImages>>()
     var apiCalling: Boolean = false
+    var orderComplete: Boolean = false
+    var orderPause: Boolean = false
     var recentOrder: Order? = null
-
 
     fun fetchMasterData(jwtToken: String, compId: Int) {
         masterData.postValue(Resource.loading(null))
@@ -243,6 +243,7 @@ class DashboardViewModel(
 
                 override fun onComplete() {
                     Log.e("Check Order Status", "Completed")
+                    orderComplete = true;
                     fetchRecentOrder()
                 }
 
@@ -491,5 +492,4 @@ class DashboardViewModel(
         imageIds.postValue(Resource.loading(null))
         imageIds.postValue(Resource.loading(null))
     }
-
 }

@@ -31,7 +31,6 @@ import com.marvsystems.fotosoftapp.ui.dashboard.RetryListener
 import com.marvsystems.fotosoftapp.ui.dashboard.adapter.OrderImagesAdapter
 import com.marvsystems.fotosoftapp.ui.dashboard.viewmodel.DashboardViewModel
 import com.marvsystems.fotosoftapp.utils.AppUtil
-import com.marvsystems.fotosoftapp.utils.CommonFunctions
 import com.marvsystems.fotosoftapp.utils.NetworkUtils
 import com.marvsystems.fotosoftapp.utils.Status
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -58,7 +57,6 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
     private val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     private val serverSdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
     private var dialog: Dialog? = null
-    private var isOrderCancel = false;
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,7 +128,6 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
             alertBuilder.setMessage("Are you sure you want to cancel the upload?")
             alertBuilder.setPositiveButton("Yes") { dialog, which ->
                 dialog.dismiss()
-                isOrderCancel = true;
                 dashboardViewModel.updateOrderStatus(
                     dashboardViewModel.recentOrder?.localOrderId?.toInt()!!,
                     "COMPLETED"
@@ -156,7 +153,6 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
                     "An order already is in progress, Please create another one once it gets completed"
                 )
             } else {
-                isOrderCancel = false;
                 val intent = Intent(requireActivity(), SelectProductActivity::class.java)
                 intent.putExtra("DATA", dashboardViewModel.user)
                 intent.putExtra("LAB", dashboardViewModel.lab)
@@ -249,6 +245,7 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
     }
 
     private fun togglePause(isPause: Boolean) {
+        dashboardViewModel.orderPause = isPause
         dashboardViewModel.toggleOrderUploadStatus(
             dashboardViewModel.recentOrder?.localOrderId?.toInt()!!,
             isPause
@@ -474,10 +471,12 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
                 }
             }
             OrderStatus.CANCELLED -> {
-                isOrderCancel = true
                 println("Order Cancelled")
             }
-            OrderStatus.COMPLETED -> println("Order Completed") // showToast("Congrats! Your order successfully placed! We will update status shortly!")
+//            println("Order Completed")
+            OrderStatus.COMPLETED -> {
+                showToast("Congrats! Your order successfully placed! We will update status shortly!")
+            }
             else -> {
                 showToast("Invalid Order Status")
             }
@@ -485,8 +484,20 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
     }
 
     private fun toggleRecentOrders(toggle: Boolean) {
-        if (ll_recent_orders.visibility == View.VISIBLE && toggle && !isOrderCancel)
-            showToast("Congrats! Your order successfully placed! We will update status shortly!")
+//        if (ll_recent_orders.visibility == View.VISIBLE && toggle && !isOrderCancel)
+        try {
+            if (ll_recent_orders.visibility == View.VISIBLE && !toggle)
+                if (dashboardViewModel.orderComplete) {
+                    if (!dashboardViewModel.orderPause) {
+                        showToast("Congrats! Your order successfully placed! We will update status shortly!")
+                        dashboardViewModel.orderComplete = false;
+                        dashboardViewModel.orderPause = false;
+                    }
+                }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        }
+
         ll_recent_orders.visibility = if (toggle) View.VISIBLE else View.GONE
         btn_create_order.visibility = if (toggle) View.VISIBLE else View.GONE
         products_recyclerview?.visibility = if (toggle) View.GONE else View.VISIBLE
