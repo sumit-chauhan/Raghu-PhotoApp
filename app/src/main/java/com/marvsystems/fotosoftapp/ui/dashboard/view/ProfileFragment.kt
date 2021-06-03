@@ -98,9 +98,9 @@ class ProfileFragment : Fragment() {
         spinner_state.adapter = statesAdapter
 
         btn_update.setOnClickListener {
-            if (isValid()) {
+            //if (isValid()) {
                 // TODO - update info
-            }
+            //}
         }
 
         stateChangeListener()
