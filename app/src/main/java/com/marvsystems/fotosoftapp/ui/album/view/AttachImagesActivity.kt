@@ -171,6 +171,11 @@ class AttachImagesActivity : BaseActivity(), DeleteListener {
                 orderImage.paperSize = order?.photoSize
                 orderImage.imageType = "Inner Image"
                 orderImage.createdByUsrId = loggedInUser?.userDetail?.id?.toLong()
+                val folderName = uri.path?.substring(
+                    AppUtil.nthLastIndexOf(2, "/", uri.path!!),
+                    AppUtil.nthLastIndexOf(1, "/", uri.path!!)
+                )
+                orderImage.imageFolderName = folderName?.replace("/", "") + "_" + order?.photoSize
                 orderImages?.add(orderImage)
             }
         }

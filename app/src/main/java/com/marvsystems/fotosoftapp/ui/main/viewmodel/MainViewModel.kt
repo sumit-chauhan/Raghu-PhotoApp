@@ -106,13 +106,13 @@ class MainViewModel(
         if (labResponseModel.installation?.comp?.contactPersonInternalMobile != null)
             contactPersonInternalMobile = labResponseModel.installation?.comp?.contactPersonInternalMobile!!
 
-
-
         val lab = Lab(
             labResponseModel.installation?.id!!,
             labResponseModel.installation?.compId!!,
             labResponseModel.installation?.licenseKey,
             labResponseModel.installation?.comp?.compName,
+            labResponseModel.installation?.httpAddressUpload,
+            labResponseModel.installation?.ftpfolderImages,
             labResponseModel.installation?.comp?.compAdd,
             labResponseModel.installation?.comp?.compCity,
             labResponseModel.installation?.comp?.compState,

@@ -31,6 +31,9 @@ interface OrderImagesDao {
     @Query("Update `OrderImages` set status = 'PENDING' WHERE localOrderId =:localOrderId AND status='UPLOADING'")
     fun markImagesPending(localOrderId: Int)
 
+//    @Query("Update `OrderImages` set imageFolderName = :imageFolderName WHERE localImageId =:localImageId")
+//    fun updateImageFolderName(imageFolderName: String, localImageId: Int)
+
     @Query("Update OrderImages set orderId=:orderId,orderNo=:orderNo WHERE localOrderId =:localOrderId")
     fun updateOrderId(localOrderId: Int, orderId: Int, orderNo: String)
 

@@ -19,8 +19,8 @@ interface OrderDao {
     @Query("UPDATE `Order` SET status = :status WHERE localOrderId=:localOrderId")
     fun changeOrderStatus(localOrderId: Int, status: String): Int
 
-    @Query("UPDATE `Order` SET status = :status ,id = :orderId, orderNo = :orderNo WHERE localOrderId=:localOrderId")
-    fun updateOrderInfo(localOrderId: Int, orderId: Int, orderNo: String, status: String): Int
+    @Query("UPDATE `Order` SET status = :status ,id = :orderId, orderNo = :orderNo, folderName = :folderName WHERE localOrderId=:localOrderId")
+    fun updateOrderInfo(localOrderId: Int, orderId: Int, orderNo: String, folderName: String, status: String): Int
 
     @Query("UPDATE `Order` SET isPause = :isPause WHERE localOrderId=:localOrderId")
     fun toggleOrderUploadStatus(localOrderId: Int, isPause: Boolean): Int

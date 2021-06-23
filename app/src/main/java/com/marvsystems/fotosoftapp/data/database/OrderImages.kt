@@ -28,5 +28,4 @@ class OrderImages : Serializable {
     var updateByUserId: Long? = 0
     var imageFolderName: String? = ""
     var imagePath: String? = ""
-
 }

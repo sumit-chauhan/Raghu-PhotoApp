@@ -47,15 +47,29 @@ class DataRepository(private val apiHelper: ApiHelper) {
         return apiHelper.updateOrderImages(orderImages, jwtToken)
     }
 
-    fun uploadImage(file: File, orderImageId: Int, jwtToken: String): Single<UploadResponseModel> {
-        return apiHelper.uploadImage(file, orderImageId, jwtToken)
+    fun uploadImage(
+        file: File,
+        orderImageId: Int,
+        httpAddressUpload: String,
+        imagePath: String,
+        orderId: Int,
+        jwtToken: String
+    ): Single<UploadResponseModel> {
+        return apiHelper.uploadImage(
+            file,
+            orderImageId,
+            httpAddressUpload,
+            imagePath,
+            orderId,
+            jwtToken
+        )
     }
 
-    fun isUserNameAvailable(compId: Int,userName:String): Observable<Boolean> {
+    fun isUserNameAvailable(compId: Int, userName: String): Observable<Boolean> {
         return apiHelper.isUserNameAvailable(compId, userName)
     }
 
-    fun signUp(signUpRequestModel:SignUpRequestModel): Single<SignUpRequestModel> {
+    fun signUp(signUpRequestModel: SignUpRequestModel): Single<SignUpRequestModel> {
         return apiHelper.signUp(signUpRequestModel)
     }
 }

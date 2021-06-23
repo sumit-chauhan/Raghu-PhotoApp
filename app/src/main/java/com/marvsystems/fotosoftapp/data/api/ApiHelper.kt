@@ -4,6 +4,8 @@ import com.marvsystems.fotosoftapp.data.database.Order
 import com.marvsystems.fotosoftapp.data.database.OrderImages
 import com.marvsystems.fotosoftapp.data.model.LoginModel
 import com.marvsystems.fotosoftapp.data.model.SignUpRequestModel
+import com.marvsystems.fotosoftapp.data.model.UploadResponseModel
+import io.reactivex.Single
 import java.io.File
 
 class ApiHelper(private val apiService: ApiService) {
@@ -29,8 +31,8 @@ class ApiHelper(private val apiService: ApiService) {
     fun updateOrderImages(orderImages: List<OrderImages>, jwtToken: String) =
         apiService.updateOrderImages(orderImages, jwtToken)
 
-    fun uploadImage(file: File, orderImageId: Int, jwtToken: String) =
-        apiService.uploadImage(file, orderImageId, jwtToken)
+    fun uploadImage(file: File, orderImageId: Int, httpAddressUpload: String, imagePath: String, orderId: Int, jwtToken: String) =
+        apiService.uploadImage(file, orderImageId,httpAddressUpload, imagePath,orderId, jwtToken)
 
     fun isUserNameAvailable(compId: Int, userName: String) =
         apiService.isUserNameAvailable(compId, userName)

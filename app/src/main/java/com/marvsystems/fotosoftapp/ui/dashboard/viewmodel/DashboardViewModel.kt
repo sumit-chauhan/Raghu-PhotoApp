@@ -10,9 +10,9 @@ import com.marvsystems.fotosoftapp.data.database.AppDatabase
 import com.marvsystems.fotosoftapp.data.database.Lab
 import com.marvsystems.fotosoftapp.data.database.Order
 import com.marvsystems.fotosoftapp.data.database.OrderImages
+import com.marvsystems.fotosoftapp.data.model.ImageUploadStatus
 import com.marvsystems.fotosoftapp.data.model.LoginModel
 import com.marvsystems.fotosoftapp.data.model.MasterDataModel
-import com.marvsystems.fotosoftapp.data.model.ImageUploadStatus
 import com.marvsystems.fotosoftapp.data.model.OrderStatus
 import com.marvsystems.fotosoftapp.data.repository.DataRepository
 import com.marvsystems.fotosoftapp.utils.AppUtil
@@ -192,9 +192,19 @@ class DashboardViewModel(
         val file = File(orderImage.imagePath!!)
         orderImage.status = ImageUploadStatus.UPLOADING.toString()
         updateOrderImageStatus(orderImage)
+//        dataRepository.uploadImage(file, orderImage.id!!, user?.jwtToken!!)
+        var imagePath =
+            lab?.ftpfolderImages + "/" + recentOrder?.folderName + "/" + orderImage.imageFolderName + "/" + orderImage.imageName;
         apiCalling = true
         compositeDisposable.add(
-            dataRepository.uploadImage(file, orderImage.id!!, user?.jwtToken!!)
+            dataRepository.uploadImage(
+                file,
+                orderImage.id!!,
+                lab?.httpAddressUpload!!,
+                imagePath,
+                orderImage.orderId!!,
+                user?.jwtToken!!
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -293,10 +303,12 @@ class DashboardViewModel(
         localOrderId: Int,
         orderId: Int,
         orderNo: String,
+        folderName: String,
         status: String
     ) {
         Completable.fromAction {
-            appDatabase.orderDao().updateOrderInfo(localOrderId, orderId, orderNo, status)
+            appDatabase.orderDao()
+                .updateOrderInfo(localOrderId, orderId, orderNo, folderName, status)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : CompletableObserver {
                 override fun onSubscribe(d: Disposable) {}
@@ -381,9 +393,10 @@ class DashboardViewModel(
                         order.localOrderId?.toInt()!!,
                         data.id!!,
                         data.orderNo!!,
+                        data.folderName!!,
                         OrderStatus.PENDING_IMAGES.toString()
                     )
-                    //createdOrder.postValue(Resource.success(data))
+                    createdOrder.postValue(Resource.success(data))
                 }, {
                     apiCalling = false
                     it.printStackTrace()

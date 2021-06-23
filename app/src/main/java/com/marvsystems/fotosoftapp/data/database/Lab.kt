@@ -11,6 +11,8 @@ class Lab(
     val compId: Int,
     @ColumnInfo(name = "licenseKey") val licenseKey: String?,
     @ColumnInfo(name = "compName") val compName: String?,
+    @ColumnInfo(name = "httpAddressUpload") val httpAddressUpload: String?,
+    @ColumnInfo(name = "ftpfolderImages") val ftpfolderImages: String?,
     @ColumnInfo(name = "compAdd") val compAdd: String?,
     @ColumnInfo(name = "compCity") val compCity: String?,
     @ColumnInfo(name = "compState") val compState: String?,

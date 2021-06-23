@@ -10,6 +10,7 @@ data class LabModel(
     val cloudQuotaMb: Int,
     val comp: Comp,
     val compId: Int,
+    val httpAddressUpload: String,
     val compressionValue: Int,
     val createdOnDt: String,
     val downloadScanDays: Int,

@@ -30,7 +30,7 @@ interface ApiService {
 
     fun updateOrderImages(orderImages : List<OrderImages>, jwtToken: String) : Observable<JSONArray>
 
-    fun uploadImage(file: File, orderImageId: Int, jwtToken: String) : Single<UploadResponseModel>
+    fun uploadImage(file: File, orderImageId: Int, httpAddressUpload: String, imagePath: String, orderId: Int, jwtToken: String) : Single<UploadResponseModel>
 
     fun isUserNameAvailable(compId: Int,userName:String) : Observable<Boolean>
 

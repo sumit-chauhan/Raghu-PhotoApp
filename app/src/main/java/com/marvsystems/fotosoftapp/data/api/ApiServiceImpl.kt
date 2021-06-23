@@ -113,6 +113,32 @@ class ApiServiceImpl : ApiService {
     override fun uploadImage(
         file: File,
         orderImageId: Int,
+        httpAddressUpload: String,
+        imagePath: String,
+        orderId: Int,
+        jwtToken: String
+    ): Single<UploadResponseModel> {
+        Log.e("ImageUpload", orderImageId.toString())
+        return Rx2AndroidNetworking.upload(BASE_URL + "api/OrderImages/UploadImagefile")
+            .addMultipartFile("ImageFile", file)
+            .addMultipartParameter("OrderImageId", orderImageId.toString())
+            .addHeaders("Authorization", "Bearer $jwtToken")
+            .setTag(orderImageId)
+            .setPriority(Priority.HIGH)
+            .setExecutor(Executors.newSingleThreadExecutor())
+            .build()
+            .setUploadProgressListener { bytesUploaded, totalBytes ->
+                Log.e(
+                    "upload/total",
+                    "$bytesUploaded/$totalBytes"
+                )
+            }
+            .getObjectSingle(UploadResponseModel::class.java)// setting an executor to get response or completion on that executor thread
+    }
+
+    fun uploadImage_old(
+        file: File,
+        orderImageId: Int,
         jwtToken: String
     ): Single<UploadResponseModel> {
         Log.e("ImageUpload", orderImageId.toString())
