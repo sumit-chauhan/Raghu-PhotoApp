@@ -100,7 +100,7 @@ class AttachImagesActivity : BaseActivity(), DeleteListener {
                     it.data?.let { order ->
                         this.order = order
                         Log.e("result", Gson().toJson(order))
-                        showToast("Order Saved Successfully")
+                        showToast("Album saved successfully")
                         viewModel?.insertImages(order, orderImages!!)
                     }
                 }
@@ -124,7 +124,7 @@ class AttachImagesActivity : BaseActivity(), DeleteListener {
                     Log.e("Success", "Success")
                     dismissProgress()
                     it.data?.let { images ->
-                        showToast("Images Saved Successfully")
+                       // showToast("Images Saved Successfully")
                         navigateToDashboard()
                     }
                 }

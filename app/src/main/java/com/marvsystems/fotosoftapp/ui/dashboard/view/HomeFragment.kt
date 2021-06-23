@@ -475,7 +475,7 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
             }
 //            println("Order Completed")
             OrderStatus.COMPLETED -> {
-                showToast("Congrats! Your order successfully placed! We will update status shortly!")
+                showToast("Album successfully uploaded.")
             }
             else -> {
                 showToast("Invalid Order Status")
@@ -489,7 +489,7 @@ class HomeFragment : Fragment(), ProductClickListener, RetryListener {
             if (ll_recent_orders.visibility == View.VISIBLE && !toggle)
                 if (dashboardViewModel.orderComplete) {
                     if (!dashboardViewModel.orderPause) {
-                        showToast("Congrats! Your order successfully placed! We will update status shortly!")
+                        showToast("Album successfully uploaded.")
                         dashboardViewModel.orderComplete = false;
                         dashboardViewModel.orderPause = false;
                     }
