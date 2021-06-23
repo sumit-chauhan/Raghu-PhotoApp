@@ -111,6 +111,7 @@ class ApiServiceImpl : ApiService {
     }
 
     override fun uploadImage(
+//  .addHeaders("Authorization", "Bearer $jwtToken")
         file: File,
         orderImageId: Int,
         httpAddressUpload: String,
@@ -118,11 +119,19 @@ class ApiServiceImpl : ApiService {
         orderId: Int,
         jwtToken: String
     ): Single<UploadResponseModel> {
+        Log.e("file", file.toString())
         Log.e("ImageUpload", orderImageId.toString())
-        return Rx2AndroidNetworking.upload(BASE_URL + "api/OrderImages/UploadImagefile")
+        Log.e("httpAddressUpload", httpAddressUpload.toString())
+        Log.e("imagePath", imagePath.toString())
+        Log.e("orderId", orderId.toString())
+        Log.e("jwtToken", jwtToken.toString())
+        return Rx2AndroidNetworking.upload(httpAddressUpload + "OrderImages/UploadImagefile")
             .addMultipartFile("ImageFile", file)
             .addMultipartParameter("OrderImageId", orderImageId.toString())
-            .addHeaders("Authorization", "Bearer $jwtToken")
+            .addMultipartParameter("ImagePath", imagePath)
+            .addMultipartParameter("OrderId", orderId.toString())
+            .addMultipartParameter("Token", jwtToken)
+            .addHeaders("Authorization", "Basic QXBwVXNlcjpBcHBQd2QwOTg=")
             .setTag(orderImageId)
             .setPriority(Priority.HIGH)
             .setExecutor(Executors.newSingleThreadExecutor())
